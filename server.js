@@ -5,7 +5,8 @@ const {
     createChat,
     loadChat,
     saveChat,
-    listChats
+    listChats,
+    removeChat
 } = require("./chat");
 
 const app = express();
@@ -58,6 +59,16 @@ app.get("/chat/:id", (req, res) => {
 
 });
 
+app.delete("/chat/:id", (req, res) => {
+
+    removeChat(req.params.id);
+
+    res.json({
+        success: true
+    });
+
+});
+
 app.post("/chat", async (req, res,) => {
 
     const { chatId, message } = req.body;
@@ -99,15 +110,24 @@ app.post("/chat", async (req, res,) => {
 
 
         if (data.message.tool_calls) {
+
             const toolObj = data.message.tool_calls;
+
             console.log(toolObj);
 
             let tool_response = '';
 
-            // agent can call multiple functions so need to loop over them to be more proper
+
             if (toolObj[0].function.name === 'get_time') {
                 tool_response = get_time();
             }
+
+            chat.messages.push({
+                role: "tool",
+                content: tool_response
+            });
+
+            saveChat(chat);
 
             res.json({
                 user: message,

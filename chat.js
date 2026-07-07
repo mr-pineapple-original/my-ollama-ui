@@ -1,6 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 
+module.exports = {
+    createChat,
+    loadChat,
+    saveChat,
+    listChats,
+    removeChat
+};
+
+
 const CHAT_DIR = path.join(__dirname, "chats");
 
 if (!fs.existsSync(CHAT_DIR)) {
@@ -68,9 +77,12 @@ function listChats() {
         });
 }
 
-module.exports = {
-    createChat,
-    loadChat,
-    saveChat,
-    listChats
-};
+function removeChat(chatId) {
+
+    const file = getChatFile(chatId);
+
+    if (fs.existsSync(file)) {
+        fs.unlinkSync(file);
+    }
+
+}

@@ -11,5 +11,12 @@
   },
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "scripts": {
+    "dev": "nodemon server.js --watch chat.js --ext js"
   }
+  
 }
