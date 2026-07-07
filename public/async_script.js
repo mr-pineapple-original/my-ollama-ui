@@ -228,6 +228,9 @@ export async function openChat(id) {
         if(msg.role==="assistant")
             addMessage(msg.content,"ai");
 
+        if(msg.role==="tool")
+            addMessage(msg.content, "tool_response")
+
     });
 
 }
