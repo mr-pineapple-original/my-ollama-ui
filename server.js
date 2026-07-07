@@ -1,4 +1,12 @@
 const express = require("express");
+const crypto = require("crypto");
+
+const {
+    createChat,
+    loadChat,
+    saveChat,
+    listChats
+} = require("./chat");
 
 const app = express();
 const PORT = 3000;
@@ -22,18 +30,54 @@ const tools = [
     }]
 
 
+app.post("/chat/new", (req, res) => {
 
+    const chatId = crypto.randomUUID();
 
-// change to post
-// get new param `messages_list` so pass all messages 
+    createChat(chatId);
+
+    res.json({ chatId });
+
+});
+
+app.get("/chats", (req, res) => {
+    res.json(listChats());
+});
+
+app.get("/chat/:id", (req, res) => {
+
+    const chat = loadChat(req.params.id);
+
+    if (!chat) {
+        return res.status(404).json({
+            error: "Chat not found"
+        });
+    }
+
+    res.json(chat);
+
+});
+
 app.post("/chat", async (req, res,) => {
 
-    const { message, message_list } = req.body;
+    const { chatId, message } = req.body;
 
-    message_list.push({
+    const chat = loadChat(chatId);
+
+    if (!chat) {
+        return res.status(404).json({
+            error: "Chat not found"
+        });
+    }
+
+    chat.messages.push({
         role: "user",
         content: message
     });
+
+    chat.updatedAt = new Date().toISOString();
+
+    saveChat(chat);
 
     try {
         const response = await fetch("http://localhost:11434/api/chat", {
@@ -46,7 +90,7 @@ app.post("/chat", async (req, res,) => {
                 think: false,
                 stream: false,
                 tools,
-                messages: message_list
+                messages: chat.messages
             })
         });
 
@@ -71,8 +115,22 @@ app.post("/chat", async (req, res,) => {
             });
 
         } else {
+            chat.messages.push({
+                role: "assistant",
+                content: data.message.content
+            });
+
+            if (chat.name === "New Chat") {
+
+                chat.name = message.length > 30
+                    ? message.substring(0, 30) + "..."
+                    : message;
+
+            }
+
+            saveChat(chat)
+
             res.json({
-                user: message,
                 ai: data.message.content
             });
         }
@@ -91,9 +149,8 @@ app.listen(PORT, () => {
 
 
 
-
-
 function get_time() {
 
     return new Date().toUTCString();
 }
+

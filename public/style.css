@@ -9,6 +9,96 @@ body{
     justify-content:center;
 }
 
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar {
+    width: 280px;
+    background: #171717;
+
+    border-right: 1px solid #333;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar-header {
+    padding: 18px;
+    border-bottom: 1px solid #333;
+}
+
+#new-chat {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #2b73ff;
+
+    color: white;
+
+    cursor: pointer;
+
+    font: inherit;
+}
+
+#chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+}
+
+
+.chat-item {
+
+    width: 100%;
+
+    background: transparent;
+    border: none;
+
+    color: #ddd;
+
+    text-align: left;
+
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    transition: background 0.2s ease;
+}
+
+
+.chat-item:hover {
+    background: #2a2a2a;
+}
+
+
+.chat-item:active {
+    background: #333;
+}
+
+#chat {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
 #chat{
     width:900px;
     max-width:100vw;
@@ -34,7 +124,7 @@ body{
     padding:0;
     
     word-wrap: normal;
-    
+
     margin:22px auto;
 
     line-height:1.7;

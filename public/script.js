@@ -1,8 +1,50 @@
 const messages = document.getElementById("messages");
 const input = document.getElementById("prompt");
 const send = document.getElementById("send");
+const newChatButton = document.getElementById("new-chat");
 
-const messages_list = []
+// const messages_list = []
+
+let chatId = null;
+
+async function newChat() {
+
+    const response = await fetch("/chat/new", {
+        method: "POST"
+    });
+
+    const data = await response.json();
+
+    chatId = data.chatId;
+    console.log("New chat:", chatId);
+}
+
+async function loadChats() {
+
+    const response = await fetch("/chats");
+
+    const chats = await response.json();
+
+    const list = document.getElementById("chat-list");
+
+    list.innerHTML = "";
+
+    chats.forEach(chat => {
+
+        const button = document.createElement("button");
+
+        button.className = "chat-item";
+
+        button.textContent = chat.name;
+
+        button.onclick = () => {
+            openChat(chat.id)
+        };
+
+        list.appendChild(button);
+
+    });
+}
 
 function addMessage(text, who) {
 
@@ -22,28 +64,42 @@ function addMessage(text, who) {
     messages.scrollTop = messages.scrollHeight;
 
 
-
-    const roleMap = {
-        user: "user",
-        ai: "assistant",
-        tool_response: "tool"
-    };
-
-    const role = roleMap[who] ?? "user";
-
-    messages_list.push({
-        role,
-        content: text,
-    })
-
-
-    if (role === 'tool') {
+    if (who === 'tool_response') {
         askAI();
     }
 }
+async function openChat(id) {
+
+    const response = await fetch(`/chat/${id}`);
+
+    const chat = await response.json();
+
+    chatId = chat.id;
+
+    messages.innerHTML = "";
+
+    chat.messages.forEach(msg => {
+
+        if (msg.role === "user") {
+            addMessage(msg.content, "user");
+        }
+
+        else if (msg.role === "assistant") {
+            addMessage(msg.content, "ai");
+        }
+
+        else if (msg.role === "tool") {
+            addMessage(msg.content, "tool_response");
+        }
+
+    });
+
+}
 
 async function askAI() {
-
+    if (!chatId) {
+        await newChat();
+    }
     const prompt = input.value.trim();
 
     if (prompt === "")
@@ -54,7 +110,7 @@ async function askAI() {
     input.value = "";
 
     input.disabled = true;
-    
+
     send.disabled = true;
 
 
@@ -79,9 +135,13 @@ async function askAI() {
         headers: {
             "Content-Type": "application/json"
         },
+        // body: JSON.stringify({
+        //     message: prompt,
+        //     message_list: messages_list
+        // })
         body: JSON.stringify({
-            message: prompt,
-            message_list: messages_list
+            chatId,
+            message: prompt
         })
     });
 
@@ -100,6 +160,8 @@ async function askAI() {
     input.disabled = false;
     send.disabled = false;
     input.focus();
+    
+    await loadChats();
 }
 
 send.onclick = askAI;
@@ -123,3 +185,15 @@ input.addEventListener("input", () => {
     input.style.height = input.scrollHeight + "px";
 
 });
+
+
+
+newChatButton.onclick = async () => {
+
+    await newChat();
+
+    messages.innerHTML = "";
+
+};
+
+loadChats();

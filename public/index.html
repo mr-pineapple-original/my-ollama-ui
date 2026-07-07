@@ -13,26 +13,39 @@
 </head>
 
 <body>
+    <div id="app">
 
-    <div id="chat">
+        <aside id="sidebar">
 
-        <div id="messages"></div>
-
-        <div id="bottom">
-            <div id="composer">
-                <textarea id="prompt" placeholder="Ask anything"></textarea>
-
-                <button id="send" aria-label="Send">
-                    ↑
-                </button>
+            <div id="sidebar-header">
+                <button id="new-chat">+ New Chat</button>
             </div>
+
+            <div id="chat-list">
+            </div>
+
+        </aside>
+
+
+        <div id="chat">
+
+            <div id="messages"></div>
+
+            <div id="bottom">
+                <div id="composer">
+                    <textarea id="prompt" placeholder="Ask anything"></textarea>
+
+                    <button id="send" aria-label="Send">
+                        ↑
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-    </div>
-
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+        <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 </body>
 
