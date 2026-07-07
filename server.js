@@ -28,7 +28,19 @@ const tools = [
                 properties: {}
             }
         }
-    }]
+    },
+    // {
+    //     type: "function",
+    //     function: {
+    //         name: "get_cpu_usage",
+    //         description: "Returns the cpu usage of node process.",
+    //         parameters: {
+    //             type: "object",
+    //             properties: {}
+    //         }
+    //     }
+    // },
+]
 
 
 app.post("/chat/new", (req, res) => {
@@ -118,9 +130,14 @@ app.post("/chat", async (req, res,) => {
             let tool_response = '';
 
 
-            if (toolObj[0].function.name === 'get_time') {
-                tool_response = get_time();
-            }
+            // if (toolObj[0].function.name === 'get_time') {
+            //     tool_response = get_time();
+            // }
+            // else if(toolObj[0].function.name === 'get_cpu_usage') {
+            //     tool_response = get_cpu_usage();
+            // }
+            tool_response = eval(toolObj[0].function.name + "()");
+
 
             chat.messages.push({
                 role: "tool",
@@ -170,7 +187,10 @@ app.listen(PORT, () => {
 
 
 function get_time() {
-
     return new Date().toUTCString();
 }
 
+// function get_cpu_usage() {
+//     console.log(process.cpuUsage())
+//     return process.cpuUsage();
+// }
