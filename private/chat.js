@@ -10,7 +10,7 @@ module.exports = {
 };
 
 
-const CHAT_DIR = path.join(__dirname, "chats");
+const CHAT_DIR = path.join(__dirname,"..", "chats");
 
 if (!fs.existsSync(CHAT_DIR)) {
     fs.mkdirSync(CHAT_DIR, { recursive: true });
