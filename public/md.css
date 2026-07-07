@@ -1,0 +1,59 @@
+.message {
+    white-space: normal;
+    line-height: 1.6;
+}
+
+.message p {
+    margin: 0.5em 0;
+}
+
+.message h1,
+.message h2,
+.message h3 {
+    margin: 0.8em 0 0.4em;
+}
+
+.message ul,
+.message ol {
+    padding-left: 24px;
+}
+
+.message :not(pre) > code {
+    background: #333;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+}
+
+.message pre {
+    padding: 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.message pre {
+    background: #1b1b1b;
+    padding: 14px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.message blockquote {
+    border-left: 4px solid #666;
+    padding-left: 12px;
+}
+
+.message table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.message th,
+.message td {
+    border: 1px solid #555;
+    padding: 6px 10px;
+}
+
+.message img {
+    max-width: 100%;
+}
