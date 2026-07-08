@@ -14,6 +14,8 @@ import {
     send
 } from "./state.js";
 
+import "./settings_ui.js";
+
 export function addMessage(text, who) {
 
     const div=document.createElement("div");

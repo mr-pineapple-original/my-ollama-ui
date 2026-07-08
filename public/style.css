@@ -446,6 +446,107 @@ textarea {
     cursor: not-allowed;
 }
 
+#controls {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+
+#model {
+
+    flex:1;
+
+    min-width:170px;
+
+    padding:8px 12px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    background:#2a2a2a;
+
+    color:#eee;
+
+    font-size:14px;
+
+    cursor:pointer;
+}
+
+
+#model:hover {
+
+    background:#323232;
+}
+
+
+.option {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#cfcfcf;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    user-select:none;
+}
+
+
+.option input {
+
+    accent-color:#4b82ff;
+
+    width:16px;
+
+    height:16px;
+}
+.toggle-btn {
+
+    padding: 8px 14px;
+
+    border: 1px solid #343434;
+
+    border-radius: 12px;
+
+    background: #2a2a2a;
+
+    color: #d8d8d8;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease;
+}
+
+.toggle-btn:hover {
+
+    background: #323232;
+}
+
+.toggle-btn.active {
+
+    background: #2563eb;
+
+    border-color: #3b82f6;
+
+    color: white;
+}
 
 #prompt {
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
+const {settings, updateSettings} = require("./private/settings");
 
 const {
     createChat,
@@ -47,6 +48,15 @@ app.get("/chat/:id", (req, res) => {
 
     res.json(chat);
 
+});
+
+app.get("/api/settings", (req, res) => {
+    res.json(settings);
+});
+
+app.post("/api/settings", (req, res) => {
+    updateSettings(req.body);
+    res.json(settings);
 });
 
 app.delete("/chat/:id", (req, res) => {

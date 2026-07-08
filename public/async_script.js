@@ -297,3 +297,6 @@ async function deleteChat(id){
     await loadChats();
 
 }
+
+// always loadChats() once whenever browser is refreshed or webpg is opened
+await loadChats();

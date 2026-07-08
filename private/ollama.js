@@ -7,11 +7,8 @@ const {
     saveChat
 } = require("./chat");
 
-const {
-    tools,
-    toolFunctions
-} = require("./tools");
-
+const { settings } = require("./settings");
+const { tools } = require("./tools");
 
 async function askOllama(messages, onToken = null, includeTools = true) {
 
@@ -24,9 +21,7 @@ async function askOllama(messages, onToken = null, includeTools = true) {
         },
 
         body: JSON.stringify({
-            model: "qwen3:1.7b",
-            think: false,
-            stream: true,
+            ...settings,
             messages,
             ...(includeTools ? { tools } : {})
         })
