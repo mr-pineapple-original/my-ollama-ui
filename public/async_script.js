@@ -10,6 +10,11 @@ import {
 import {
     addMessage
 } from "./script.js";
+
+import {
+    createStatsFooter
+} from "./stats_parser.js";
+
 // ------------------------------------------------------------------
 export async function askAI() {
 
@@ -49,7 +54,7 @@ export async function askAI() {
 
     composer.disabled = true
 
-        try {
+    try {
 
         const response = await fetch("/chat", {
 
@@ -93,6 +98,7 @@ export async function askAI() {
             messages.scrollTop = messages.scrollHeight;
 
         }
+        let stats = null;
 
         while (true) {
 
@@ -103,9 +109,23 @@ export async function askAI() {
 
             content += decoder.decode(value, { stream: true });
 
+            // Extract metadata if it has arrived
+            const marker = "\n__META__";
+            const idx = content.indexOf(marker);
+
+            if (idx !== -1) {
+
+                try {
+                    stats = JSON.parse(content.slice(idx + marker.length));
+                    content = content.slice(0, idx);
+                } catch {
+                    // JSON probably hasn't fully arrived yet
+                }
+
+            }
+
             const now = performance.now();
 
-            // Render at ~25 FPS instead of every token
             if (now - lastRender > 40) {
                 render();
                 lastRender = now;
@@ -113,10 +133,24 @@ export async function askAI() {
 
         }
 
-        // Final render to ensure everything is displayed
+        // Final cleanup in case metadata arrived at the very end
+        const marker = "\n__META__";
+        const idx = content.indexOf(marker);
+
+        if (idx !== -1) {
+
+            stats = JSON.parse(content.slice(idx + marker.length));
+            content = content.slice(0, idx);
+
+        }
+
         render();
 
-     } catch (err) {
+        if (stats) {
+            ai.appendChild(createStatsFooter(stats));
+        }
+
+    } catch (err) {
 
         typing.remove();
 
@@ -137,7 +171,6 @@ export async function askAI() {
     send.disabled = false;
 
     input.focus();
-
 
     await loadChats();
 
@@ -206,7 +239,7 @@ export async function loadChats() {
         deleteButton.textContent = "×";
 
 
-        deleteButton.onclick = async (e)=>{
+        deleteButton.onclick = async (e) => {
 
             e.stopPropagation();
 
@@ -230,7 +263,7 @@ export async function loadChats() {
 export async function openChat(id) {
 
     setChatId(id)
-    
+
     // remove active from previous chat
     document.querySelectorAll(".chat-item")
         .forEach(item => item.classList.remove("active"));
@@ -254,36 +287,40 @@ export async function openChat(id) {
     messages.innerHTML = "";
 
 
-    chat.messages.forEach(msg=>{
+    chat.messages.forEach(msg => {
 
-        if(msg.role==="user")
-            addMessage(msg.content,"user");
+        if (msg.role === "user")
+            addMessage(msg.content, "user");
 
 
-        if(msg.role==="assistant")
-            addMessage(msg.content,"ai");
+        if (msg.role === "assistant") {
+            const ai = addMessage(msg.content, "ai");
 
-        if(msg.role==="tool")
+            if (msg.stats) {
+                ai.appendChild(createStatsFooter(msg.stats));
+            }
+        }
+        if (msg.role === "tool")
             addMessage(msg.content, "tool_response")
 
     });
 
 }
 
-async function deleteChat(id){
+async function deleteChat(id) {
 
-    await fetch(`/chat/${id}`,{
+    await fetch(`/chat/${id}`, {
 
-        method:"DELETE"
+        method: "DELETE"
 
     });
 
 
-    if(getChatId()===id){
+    if (getChatId() === id) {
 
         setChatId(null)
 
-        messages.innerHTML="";
+        messages.innerHTML = "";
 
         history.pushState(
             {},

@@ -92,11 +92,11 @@ async function askOllama(messages, onToken = null, includeTools = true) {
     }
 
     return {
-        content: fullMessage,
         message: {
             ...(finalChunk?.message ?? {}),
             content: fullMessage
-        }
+        },
+        stats: finalChunk
     };
 
 }
@@ -145,7 +145,8 @@ async function chat(chatId, message, onToken = null) {
 
     chat.messages.push({
         role: "assistant",
-        content: data.content
+        content: data.message.content,
+        stats: data.stats
     });
 
     if (chat.name === "New Chat") {
@@ -157,11 +158,10 @@ async function chat(chatId, message, onToken = null) {
     }
 
     saveChat(chat);
-
     return {
-        ai: data.content
+        ai: data.content,
+        stats: data.stats,
     };
-
 }
 
 

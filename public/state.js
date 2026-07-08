@@ -21,4 +21,3 @@ export function setChatId(id){
 export function getChatId() {
     return chatId;
 }
-

@@ -38,6 +38,8 @@ export function addMessage(text, who) {
     messages.scrollTop =
         messages.scrollHeight;
 
+    return div;
+
 }
 
 
@@ -110,3 +112,38 @@ window.onpopstate=()=>{
         openChat(id);
 
 };
+
+
+// auto focus the prompt
+input.focus()
+
+// auto focus on any keydown
+document.addEventListener("keydown", (e) => {
+    const active = document.activeElement;
+
+    // Ignore shortcuts/modifier keys
+    if (
+        e.ctrlKey ||
+        e.altKey ||
+        e.metaKey ||
+        e.key === "Control" ||
+        e.key === "Alt" ||
+        e.key === "Meta" ||
+        e.key === "Shift"
+    ) {
+        return;
+    }
+
+
+    if (
+        active === prompt ||
+        active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA" ||
+        active.tagName === "SELECT" ||
+        active.isContentEditable
+    ) {
+        return;
+    }
+
+    input.focus();
+});

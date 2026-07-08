@@ -1,6 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
-const {settings, updateSettings} = require("./private/settings");
+const { settings, updateSettings } = require("./private/settings");
 
 const {
     createChat,
@@ -76,14 +76,18 @@ app.post("/chat", async (req, res) => {
 
     try {
 
-        await chat(
+        const result = await chat(
             req.body.chatId,
             req.body.message,
-            (token) => {
+            token => {
                 res.write(token);
             }
         );
 
+        res.write(
+            "\n__META__" +
+            JSON.stringify(result.stats)
+        );
         res.end();
 
     } catch (err) {
