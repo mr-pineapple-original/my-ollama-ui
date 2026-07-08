@@ -19,8 +19,31 @@ async function askOllama(messages, includeTools = true) {
             "Content-Type": "application/json"
         },
 
+async function askOllama(messages, includeTools = true) {
+
+    const response = await fetch("http://localhost:11434/api/chat", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
         body: JSON.stringify({
-            model: "qwen3.5:4b",
+            model: "qwen3:1.7b",
+            think: false,
+            stream: false,
+            messages,
+            ...(includeTools ? { tools } : {})
+        })
+
+    });
+
+    return response.json();
+}
+
+        body: JSON.stringify({
+            model: "qwen3:1.7b",
             think: false,
             stream: false,
             messages,
@@ -50,6 +73,8 @@ async function chat(chatId, message) {
 
     let data = await askOllama(chat.messages);
 
+    console.log(JSON.stringify(data, null, 2));
+    
     while (data.message.tool_calls) {
 
         const toolCall = data.message.tool_calls[0];
