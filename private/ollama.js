@@ -1,3 +1,7 @@
+module.exports = {
+    chat
+};
+
 const {
     loadChat,
     saveChat
@@ -9,17 +13,7 @@ const {
 } = require("./tools");
 
 
-async function askOllama(messages, includeTools = true) {
-
-    const response = await fetch("http://localhost:11434/api/chat", {
-
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-async function askOllama(messages, includeTools = true) {
+async function askOllama(messages, onToken = null, includeTools = true) {
 
     const response = await fetch("http://localhost:11434/api/chat", {
 
@@ -32,37 +26,93 @@ async function askOllama(messages, includeTools = true) {
         body: JSON.stringify({
             model: "qwen3:1.7b",
             think: false,
-            stream: false,
+            stream: true,
             messages,
             ...(includeTools ? { tools } : {})
         })
 
     });
 
-    return response.json();
+    if (!response.ok)
+        throw new Error(await response.text());
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    let buffer = "";
+    let fullMessage = "";
+    let finalChunk = null;
+
+    while (true) {
+
+        const { done, value } = await reader.read();
+
+        if (done)
+            break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+
+            if (!line.trim())
+                continue;
+
+            const chunk = JSON.parse(line);
+
+            if (chunk.message?.content) {
+
+                fullMessage += chunk.message.content;
+
+                if (onToken)
+                    onToken(chunk.message.content);
+
+            }
+
+            if (chunk.done)
+                finalChunk = chunk;
+
+        }
+
+    }
+
+    if (buffer.trim()) {
+
+        const chunk = JSON.parse(buffer);
+
+        if (chunk.message?.content) {
+
+            fullMessage += chunk.message.content;
+
+            if (onToken)
+                onToken(chunk.message.content);
+
+        }
+
+        if (chunk.done)
+            finalChunk = chunk;
+
+    }
+
+    return {
+        content: fullMessage,
+        message: {
+            ...(finalChunk?.message ?? {}),
+            content: fullMessage
+        }
+    };
+
 }
 
-        body: JSON.stringify({
-            model: "qwen3:1.7b",
-            think: false,
-            stream: false,
-            messages,
-            ...(includeTools ? { tools } : {})
-        })
 
-    });
-
-    return response.json();
-}
-
-
-async function chat(chatId, message) {
+async function chat(chatId, message, onToken = null) {
 
     const chat = loadChat(chatId);
 
     if (!chat)
         throw new Error("Chat not found");
-
 
     chat.messages.push({
         role: "user",
@@ -71,11 +121,9 @@ async function chat(chatId, message) {
 
     chat.updatedAt = new Date().toISOString();
 
-    let data = await askOllama(chat.messages);
+    let data = await askOllama(chat.messages, onToken);
 
-    console.log(JSON.stringify(data, null, 2));
-    
-    while (data.message.tool_calls) {
+    while (data.message.tool_calls?.length) {
 
         const toolCall = data.message.tool_calls[0];
 
@@ -96,12 +144,13 @@ async function chat(chatId, message) {
             content: toolResponse
         });
 
-        data = await askOllama(chat.messages);
+        data = await askOllama(chat.messages, onToken);
+
     }
 
     chat.messages.push({
         role: "assistant",
-        content: data.message.content
+        content: data.content
     });
 
     if (chat.name === "New Chat") {
@@ -115,11 +164,9 @@ async function chat(chatId, message) {
     saveChat(chat);
 
     return {
-        ai: data.message.content
+        ai: data.content
     };
+
 }
 
 
-module.exports = {
-    chat
-};

@@ -49,17 +49,17 @@ export async function askAI() {
 
     composer.disabled = true
 
-    try {
+        try {
 
         const response = await fetch("/chat", {
 
-            method:"POST",
+            method: "POST",
 
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             },
 
-            body:JSON.stringify({
+            body: JSON.stringify({
 
                 chatId: getChatId(),
 
@@ -69,21 +69,56 @@ export async function askAI() {
 
         });
 
+        typing.remove();
+        const ai = document.createElement("div");
 
-        const data = await response.json();
+        ai.className = "message ai";
 
+        messages.appendChild(ai);
 
-        if(data.ai) {
-            addMessage(data.ai, "ai");
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        let content = "";
+        let lastRender = 0;
+
+        function render() {
+
+            ai.innerHTML = marked.parse(content);
+
+            ai.querySelectorAll("pre code").forEach(block => {
+                hljs.highlightElement(block);
+            });
+
+            messages.scrollTop = messages.scrollHeight;
+
         }
 
+        while (true) {
 
-        if(data.tool_response) {
-            addMessage(data.tool_response, "tool_response");
+            const { done, value } = await reader.read();
+
+            if (done)
+                break;
+
+            content += decoder.decode(value, { stream: true });
+
+            const now = performance.now();
+
+            // Render at ~25 FPS instead of every token
+            if (now - lastRender > 40) {
+                render();
+                lastRender = now;
+            }
+
         }
 
+        // Final render to ensure everything is displayed
+        render();
 
-    } catch(err) {
+     } catch (err) {
+
+        typing.remove();
 
         addMessage(
             "Error contacting server.",

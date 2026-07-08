@@ -61,23 +61,26 @@ app.delete("/chat/:id", (req, res) => {
 
 app.post("/chat", async (req, res) => {
 
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Transfer-Encoding", "chunked");
+
     try {
 
-        const result = await chat(
+        await chat(
             req.body.chatId,
-            req.body.message
+            req.body.message,
+            (token) => {
+                res.write(token);
+            }
         );
 
-        res.json(result);
+        res.end();
 
-    }
-    catch (err) {
+    } catch (err) {
 
         console.error(err);
 
-        res.status(500).json({
-            error: err.message
-        });
+        res.status(500).end(err.message);
 
     }
 
