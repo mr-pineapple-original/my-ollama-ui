@@ -26,20 +26,26 @@ export function addMessage(text, who) {
         hljs.highlightElement(block);
     });
 
+
+    // add copy button
     const actions = document.createElement("div");
     actions.className = "message-actions";
 
     const copyBtn = document.createElement("button");
     copyBtn.className = "copy-btn";
-    copyBtn.textContent = "📋 Copy";
-
+    const icon = document.createElement("img");
+    icon.src = "/svg/copy.svg"
+    
+    
     copyBtn.onclick = async () => {
         await navigator.clipboard.writeText(text);
-        copyBtn.textContent = "✓ Copied";
+        icon.src = "svg/tick.svg"
+
         setTimeout(() => {
-            copyBtn.textContent = "📋 Copy";
+            icon.src = "svg/copy.svg"
         }, 1500);
     };
+    copyBtn.appendChild(icon);
 
     actions.appendChild(copyBtn);
     div.appendChild(actions);

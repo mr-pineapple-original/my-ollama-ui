@@ -84,13 +84,14 @@
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
+
   padding: 0;
 
   border: none;
   border-radius: 50%;
 
   background: var(--button-bg);
-  color: var(--button-text);
 
   cursor: pointer;
 
@@ -101,7 +102,6 @@
 
 #send:hover {
   background: var(--button-bg-hover);
-
   transform: scale(1.05);
 }
 
@@ -109,9 +109,18 @@
   transform: scale(.95);
 }
 
+#send:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 #send img {
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
 
   display: block;
+
+  user-select: none;
+  pointer-events: none;
 }
