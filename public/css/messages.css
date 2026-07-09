@@ -1,0 +1,106 @@
+/* =========================
+   Messages
+========================= */
+
+#messages {
+  flex: 1;
+
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+  padding: 35px 20px;
+}
+
+.message {
+  max-width: 850px;
+
+  margin: 22px auto;
+
+  font-size: 15.5px;
+  line-height: 1.7;
+
+  word-wrap: break-word;
+}
+
+/* =========================
+   User Message
+========================= */
+
+.user {
+  max-width: 70%;
+
+  margin-left: auto;
+
+  padding: 13px 18px;
+
+  border-radius: 22px 22px 6px 22px;
+
+  background: var(--user-bg);
+  color: var(--user-text);
+
+  box-shadow: 0 4px 18px var(--shadow);
+}
+
+/* =========================
+   Assistant Message
+========================= */
+
+.ai {
+  background: transparent;
+  color: var(--text);
+}
+
+/* =========================
+   Tool Response
+========================= */
+
+.tool_response {
+  width: fit-content;
+
+  margin: 12px auto;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--tool-border);
+  border-radius: 18px;
+
+  background: var(--tool-bg);
+  color: var(--tool-text);
+
+  font-size: 14px;
+}
+
+/* =========================
+   Message Meta
+========================= */
+
+.message-meta {
+  display: flex;
+  gap: 10px;
+
+  margin-top: 12px;
+
+  font-size: 12px;
+  color: var(--placeholder);
+}
+
+.message-meta span {
+  padding: 2px 8px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 999px;
+
+  background: var(--surface);
+}
+
+/* =========================
+   Message Actions
+========================= */
+
+.message-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 8px;
+}

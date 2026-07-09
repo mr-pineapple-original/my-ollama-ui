@@ -2,71 +2,64 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>OOGA THE BOOGA AI</title>
+  <meta charset="UTF-8">
+  <title>OOGA THE BOOGA AI</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="md.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
 
 </head>
 
 <body>
-    <div id="app">
+  <div id="app">
 
-        <aside id="sidebar">
+    <aside id="sidebar">
 
-            <div id="sidebar-header">
-                <button id="new-chat">+ New Chat</button>
-            </div>
+      <div id="sidebar-header">
+        <button id="new-chat">+ New Chat</button>
+      </div>
 
-            <div id="chat-list">
-            </div>
+      <div id="chat-list">
+      </div>
 
-        </aside>
-
-
-        <div id="chat">
-
-            <div id="messages"></div>
-
-            <div id="bottom">
-                <div id="composer">
-                    <textarea id="prompt" placeholder="Ask anything"></textarea>
-
-                    <div id="controls">
-                        <select id="model">
-
-                        </select>
-
-                        <button id="think" class="toggle-btn" type="button">
-                            Think
-                        </button>
-
-                        <button id="stream" class="toggle-btn active" type="button">
-                            Stream
-                        </button>
+    </aside>
 
 
-                    </div>
-                    <button id="send" aria-label="Send">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+    <div id="chat">
 
-                            <path d="M12 19V5"></path>
-                            <path d="M5 12l7-7 7 7"></path>
+      <div id="messages"></div>
 
-                        </svg>
-                    </button>
-                </div>
-            </div>
+      <div id="bottom">
+        <div id="composer">
+          <textarea id="prompt" placeholder="Ask anything"></textarea>
 
+          <div id="controls">
+            <select id="model">
+
+            </select>
+
+            <button id="think" class="toggle-btn" type="button">
+              Think
+            </button>
+
+            <button id="stream" class="toggle-btn active" type="button">
+              Stream
+            </button>
+
+
+          </div>
         </div>
+        <button id="send" aria-label="Send">
+          <img src="/svg/send.svg" alt="" aria-hidden="true">
+        </button>
 
-        <script type="module" src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+      </div>
+
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 </body>
 

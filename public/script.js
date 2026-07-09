@@ -17,32 +17,38 @@ import {
 import "./settings_ui.js";
 
 export function addMessage(text, who) {
+    const div = document.createElement("div");
+    div.className = "message " + who;
 
-    const div=document.createElement("div");
+    div.innerHTML = marked.parse(text);
 
-    div.className="message "+who;
-
-
-    div.innerHTML=marked.parse(text);
-
-
-    div.querySelectorAll("pre code")
-    .forEach(block=>{
+    div.querySelectorAll("pre code").forEach(block => {
         hljs.highlightElement(block);
     });
 
+    const actions = document.createElement("div");
+    actions.className = "message-actions";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "📋 Copy";
+
+    copyBtn.onclick = async () => {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "✓ Copied";
+        setTimeout(() => {
+            copyBtn.textContent = "📋 Copy";
+        }, 1500);
+    };
+
+    actions.appendChild(copyBtn);
+    div.appendChild(actions);
 
     messages.appendChild(div);
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
 
     return div;
-
 }
-
-
 
 
 send.onclick = askAI;
@@ -81,7 +87,7 @@ input.addEventListener(
 newChatButton.onclick = newChat;
 
 
-
+// this async shouldnt be here
 window.onload = async()=>{
 
     await loadChats();

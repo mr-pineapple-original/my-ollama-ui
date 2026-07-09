@@ -1,0 +1,61 @@
+/* =========================
+   Default Theme
+========================= */
+
+:root {
+  /* Backgrounds */
+  --bg: #111111;
+  --surface: #171717;
+  --surface-2: #1f1f1f;
+  --surface-3: #262626;
+  --surface-4: #2a2a2a;
+  --surface-5: #303030;
+
+  /* Text */
+  --text: #ededed;
+  --text-secondary: #d4d4d4;
+  --text-muted: #888888;
+  --placeholder: #777777;
+
+  /* Borders */
+  --border: #292929;
+  --border-light: #343434;
+
+  /* Primary */
+  --primary: #2563eb;
+  --primary-hover: #3b82f6;
+  --primary-ring: rgba(75, 130, 255, .15);
+
+  /* Buttons */
+  --button-bg: #f5f5f5;
+  --button-bg-hover: #ffffff;
+  --button-text: #111111;
+
+  /* User bubble */
+  --user-bg: #38465f;
+  --user-text: #eef5ff;
+
+  /* AI message */
+  --ai-bg: transparent;
+  --ai-text: #ededed;
+
+  /* Tool response */
+  --tool-bg: #263b32;
+  --tool-border: #315b47;
+  --tool-text: #b7f7d0;
+
+  /* Danger */
+  --danger-bg: #3a2020;
+  --danger-text: #ff8a8a;
+
+  /* Misc */
+  --hover-overlay: rgba(255, 255, 255, .08);
+  --shadow: rgba(0, 0, 0, .15);
+
+  /* Scrollbars */
+  --scrollbar: #3a3a3a;
+  --scrollbar-hover: #555555;
+
+  /* Typing */
+  --typing-dot: #aaaaaa;
+}

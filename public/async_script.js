@@ -295,7 +295,6 @@ export async function openChat(id) {
 
         if (msg.role === "assistant") {
             const ai = addMessage(msg.content, "ai");
-
             if (msg.stats) {
                 ai.appendChild(createStatsFooter(msg.stats));
             }
